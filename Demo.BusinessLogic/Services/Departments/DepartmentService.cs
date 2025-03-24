@@ -1,13 +1,13 @@
-﻿using Demo.BusinessLogic.DataTransferObjects;
+﻿using Demo.BusinessLogic.DataTransferObjects.Department;
 using Demo.BusinessLogic.Factories;
-using Demo.DataAccess.Repositories;
+using Demo.DataAccess.Repositories.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 
-namespace Demo.BusinessLogic.Services
+namespace Demo.BusinessLogic.Services.Departments
 {
     public class DepartmentService(IDepartmentRepositories _departmentRepositories) : IDepartmentService
     {

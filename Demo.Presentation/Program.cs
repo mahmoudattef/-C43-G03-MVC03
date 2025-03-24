@@ -1,6 +1,7 @@
-using Demo.BusinessLogic.Services;
+using Demo.BusinessLogic.Services.Departments;
 using Demo.DataAccess.Data.Contexts;
-using Demo.DataAccess.Repositories;
+using Demo.DataAccess.Repositories.Classes;
+using Demo.DataAccess.Repositories.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 
@@ -22,6 +23,7 @@ namespace Demo.Presentation
             //builder.Services.AddScoped<DepartmentRepositories>();
             builder.Services.AddScoped<IDepartmentRepositories,DepartmentRepositories>();
             builder.Services.AddScoped<IDepartmentService,DepartmentService>();
+            builder.Services.AddScoped<IEmployeeRepository ,EmployeeRepositories>();
             #endregion
 
             var app = builder.Build();
