@@ -1,6 +1,7 @@
 ﻿using Demo.BusinessLogic.DataTransferObjects;
+using Demo.BusinessLogic.DataTransferObjects.Department;
 
-namespace Demo.BusinessLogic.Services
+namespace Demo.BusinessLogic.Services.Departments
 {
     public interface IDepartmentService
     {
