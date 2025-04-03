@@ -19,12 +19,12 @@ namespace Demo.BusinessLogic.DataTransferObjects.Employees
         public string? Email { get; set; }
         public string? PhoneNumber { get; set; }
         public DateOnly HiringDate { get; set; }
-        public Gender Gender { get; set; }
-        public EmployeeType EmployeeType { get; set; }
+        public string Gender { get; set; }
+        public string EmployeeType { get; set; }
         public int CreatedBy { get; set; }
-        public DateOnly CreatedOn { get; set; }
+        public DateTime CreatedOn { get; set; }
         public int LastModifiedBy { get; set; }
-        public DateOnly LastModifiedOn { get; set; }
+        public DateTime LastModifiedOn { get; set; }
         public bool IsDeleted { get; set; }
         
     }
