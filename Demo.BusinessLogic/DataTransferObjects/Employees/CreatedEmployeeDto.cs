@@ -26,7 +26,7 @@ namespace Demo.BusinessLogic.DataTransferObjects.Employees
      
         public string? PhoneNumber { get; set; }
 
-        public DateTime HiringDate { get; set; }
+        public DateOnly HiringDate { get; set; }
         public Gender Gender { get; set; }
         public EmployeeType EmployeeType { get; set; }
     }

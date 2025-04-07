@@ -16,8 +16,7 @@ namespace Demo.BusinessLogic.DataTransferObjects.Employees
         public decimal Salary { get; set; }
         public bool IsAction { get; set; }
         public string? Email { get; set; }
-
-        public Gender Gender { get; set; }
-        public EmployeeType EmployeeType { get; set; }
+        public string EmpGender { get; set; }
+        public string EmpType { get; set; }
     }
 }
