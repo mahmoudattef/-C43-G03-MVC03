@@ -6,6 +6,7 @@ using Demo.DataAccess.Data.Contexts;
 using Demo.DataAccess.Models.IdentityModel;
 using Demo.DataAccess.Repositories.Classes;
 using Demo.DataAccess.Repositories.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -28,7 +29,7 @@ namespace Demo.Presentation
             });
             builder.Services.AddDbContext<ApplicationDbContext>(options =>
          {
-             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+             options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")).EnableDetailedErrors().EnableSensitiveDataLogging();
              options.UseLazyLoadingProxies();
          });
             //builder.Services.AddScoped<DepartmentRepositories>();
@@ -46,7 +47,18 @@ namespace Demo.Presentation
             //    Options.Password.RequireLowercase = true;
             //    Options.Password.RequireUppercase = true;
             })
-                .AddEntityFrameworkStores<ApplicationDbContext>();
+                .AddEntityFrameworkStores<ApplicationDbContext>()
+                .AddDefaultTokenProviders();//PasswordSignIn Depend in AddDefaultTokenProviders Service
+
+            builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
+                options =>
+                {
+                    options.LoginPath = "/Account/Login";
+                    options.AccessDeniedPath = "/Home/Error";
+                    options.LogoutPath = "/Account/Login";
+                }
+                );
+
 
             #endregion
 
@@ -64,7 +76,7 @@ namespace Demo.Presentation
             app.UseStaticFiles();
 
             app.UseRouting();
-
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.MapControllerRoute(
