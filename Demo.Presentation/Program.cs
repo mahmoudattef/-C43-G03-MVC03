@@ -6,6 +6,7 @@ using Demo.DataAccess.Data.Contexts;
 using Demo.DataAccess.Models.IdentityModel;
 using Demo.DataAccess.Repositories.Classes;
 using Demo.DataAccess.Repositories.Interfaces;
+using Demo.Presentation.Settings;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
@@ -50,6 +51,8 @@ namespace Demo.Presentation
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();//PasswordSignIn Depend in AddDefaultTokenProviders Service
 
+
+
             builder.Services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme).AddCookie(
                 options =>
                 {
@@ -58,21 +61,23 @@ namespace Demo.Presentation
                     options.LogoutPath = "/Account/Login";
                 }
                 );
+                builder.Services.Configure<MailSettings>(
+                    builder.Configuration.GetSection("MailSetting")
+                    );
 
+                #endregion
 
-            #endregion
+                var app = builder.Build();
 
-            var app = builder.Build();
+                #region Configure the HTTP request pipeline.
+                if (!app.Environment.IsDevelopment())
+                {
+                    app.UseExceptionHandler("/Home/Error");
+                    // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
+                    app.UseHsts();
+                }
 
-            #region Configure the HTTP request pipeline.
-            if (!app.Environment.IsDevelopment())
-            {
-                app.UseExceptionHandler("/Home/Error");
-                // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
-                app.UseHsts();
-            }
-
-            app.UseHttpsRedirection();
+                app.UseHttpsRedirection();
             app.UseStaticFiles();
 
             app.UseRouting();
