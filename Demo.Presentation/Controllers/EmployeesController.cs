@@ -5,10 +5,12 @@ using Demo.BusinessLogic.Services.Employees;
 using Demo.DataAccess.Models.EmployeeModel;
 using Demo.DataAccess.Models.Shared.Enums;
 using Demo.Presentation.ViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Presentation.Controllers
 {
+    [Authorize]
     public class EmployeesController(IEmployeeService _employeeService, IWebHostEnvironment _environment,
         ILogger<EmployeesController> _logger) : Controller
     {
@@ -46,6 +48,7 @@ namespace Demo.Presentation.Controllers
                         PhoneNumber = employeeViewModel.PhoneNumber,
                         Salary   = employeeViewModel.Salary,
                         DepartmentId = employeeViewModel.DepartmentId,
+                        Image =employeeViewModel.Image
                     };
                     int Result = _employeeService.CreateEmployee(employeeDto); //return Number of Row Affected
                     if (Result > 0)
@@ -125,7 +128,8 @@ namespace Demo.Presentation.Controllers
                 EmployeeType = Enum.Parse<EmployeeType>(employee.EmployeeType),
                 Salary = employee.Salary,
                 DepartmentId = employee.DepartmentId,
-                
+                //Image = employee.Image,
+
             };
             return View(employeeViewModel);
         }
@@ -150,8 +154,9 @@ namespace Demo.Presentation.Controllers
                    Gender=employeeViewModel.Gender,
                    EmployeeType=employeeViewModel.EmployeeType,
                    Salary=employeeViewModel.Salary,
-                   
+                   Image = employeeViewModel.Image,
                    DepartmentId = employeeViewModel.DepartmentId,
+                   
                 };
                 var result = _employeeService.UpdateEmployee(employeeDto);
                 if (result > 0)
