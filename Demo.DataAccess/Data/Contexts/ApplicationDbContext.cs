@@ -1,5 +1,6 @@
 ﻿using Demo.DataAccess.Models.DepartmentModel;
 using Demo.DataAccess.Models.IdentityModel;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
@@ -16,7 +17,9 @@ namespace Demo.DataAccess.Data.Contexts
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+            modelBuilder.Entity<IdentityRole>().Property(d=>d.Id).HasDefaultValueSql("NewId()");
             base.OnModelCreating(modelBuilder);
+            
         }
         public DbSet<Department> Departments { get; set; }
         public DbSet<Employee> Employees { get; set; }
