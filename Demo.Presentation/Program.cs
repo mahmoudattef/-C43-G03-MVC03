@@ -73,7 +73,7 @@ namespace Demo.Presentation
             builder.Services.AddAuthentication(option =>
             {
                 option.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
-                option.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme ;
             }).AddGoogle(option  =>
             {
                 IConfiguration GoogleAuthSection=builder.Configuration.GetSection("Authentication:Google");
