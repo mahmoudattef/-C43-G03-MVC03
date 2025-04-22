@@ -80,7 +80,7 @@ namespace Demo.Presentation.Controllers
         }
         public async Task<IActionResult> GoogleResponse()
         {
-            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme) ;
             var claims=result.Principal.Identities.FirstOrDefault().Claims.Select(claim=> new
             {
                 claim.Issuer,
