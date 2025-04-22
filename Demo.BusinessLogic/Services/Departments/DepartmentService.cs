@@ -15,8 +15,8 @@ namespace Demo.BusinessLogic.Services.Departments
         public IEnumerable<DepartmentDto> GetAllDepartment()
         {
             var department = _unitOfWork.departmentRepository.GetAll();
-            return department.Select(D => D.ToDepartmentDto())
- ;
+            return department.Select(D => D.ToDepartmentDto());
+ 
         }
 
         //Get Department By Id
