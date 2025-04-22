@@ -6,10 +6,13 @@ using Demo.DataAccess.Data.Contexts;
 using Demo.DataAccess.Models.IdentityModel;
 using Demo.DataAccess.Repositories.Classes;
 using Demo.DataAccess.Repositories.Interfaces;
+using Demo.Presentation.Helpers;
 using Demo.Presentation.Settings;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.CodeAnalysis.Options;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
@@ -44,9 +47,9 @@ namespace Demo.Presentation
             builder.Services.AddIdentity<ApplicationUser, IdentityRole>(Options =>
             {
                 //some configuration 
-            ////Options.User.RequireUniqueEmail = true
-            //    Options.Password.RequireLowercase = true;
-            //    Options.Password.RequireUppercase = true;
+                ////Options.User.RequireUniqueEmail = true
+                //    Options.Password.RequireLowercase = true;
+                //    Options.Password.RequireUppercase = true;
             })
                 .AddEntityFrameworkStores<ApplicationDbContext>()
                 .AddDefaultTokenProviders();//PasswordSignIn Depend in AddDefaultTokenProviders Service
@@ -61,9 +64,22 @@ namespace Demo.Presentation
                     options.LogoutPath = "/Account/Login";
                 }
                 );
-                builder.Services.Configure<MailSettings>(
-                    builder.Configuration.GetSection("MailSetting")
-                    );
+            builder.Services.Configure<MailSettings>(
+                builder.Configuration.GetSection("MailSetting")
+                );
+            builder.Services.AddTransient<IMailService, MailService>();
+           
+
+            builder.Services.AddAuthentication(option =>
+            {
+                option.DefaultAuthenticateScheme = GoogleDefaults.AuthenticationScheme;
+                option.DefaultChallengeScheme = GoogleDefaults.AuthenticationScheme;
+            }).AddGoogle(option  =>
+            {
+                IConfiguration GoogleAuthSection=builder.Configuration.GetSection("Authentication:Google");
+                option.ClientId = GoogleAuthSection["ClientId"];
+                option.ClientSecret = GoogleAuthSection["ClientSecret"];
+            });
 
                 #endregion
 

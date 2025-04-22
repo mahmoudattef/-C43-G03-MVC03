@@ -1,12 +1,15 @@
 ﻿using Demo.DataAccess.Models.IdentityModel;
+using Demo.Presentation.Helpers;
 using Demo.Presentation.Utilities;
 using Demo.Presentation.ViewModels;
+using Microsoft.AspNetCore.Authentication;
+using Microsoft.AspNetCore.Authentication.Google;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 
 namespace Demo.Presentation.Controllers
 {
-    public class AccountController(UserManager<ApplicationUser> _userManager,SignInManager<ApplicationUser> _signInManager) : Controller
+    public class AccountController(UserManager<ApplicationUser> _userManager,SignInManager<ApplicationUser> _signInManager ,IMailService _mailService) : Controller
     {
         [HttpGet]
         public IActionResult Register() => View();
@@ -66,6 +69,29 @@ namespace Demo.Presentation.Controllers
                     }
                 return View(loginViewModel);
         }
+
+        public IActionResult GoogleLogin()
+        {
+            var prop = new AuthenticationProperties
+            {
+                RedirectUri = Url.Action("GoogleResponse")
+            };
+            return Challenge(prop,GoogleDefaults.AuthenticationScheme);
+        }
+        public async Task<IActionResult> GoogleResponse()
+        {
+            var result = await HttpContext.AuthenticateAsync(GoogleDefaults.AuthenticationScheme);
+            var claims=result.Principal.Identities.FirstOrDefault().Claims.Select(claim=> new
+            {
+                claim.Issuer,
+                claim.OriginalIssuer,
+                claim.Type,
+                claim.Value
+            });
+            return RedirectToAction("Index", "Home");
+
+        }
+
         [HttpGet]
         public new ActionResult SignOut(){
             _signInManager.SignOutAsync().GetAwaiter().GetResult();
@@ -90,8 +116,10 @@ namespace Demo.Presentation.Controllers
                         Body =resetPasswordLink
                     };
 
-                    EmailSettings.SendEmail(email);
-                    return RedirectToAction(nameof(CheckYourInbox));
+
+                    //EmailSettings.SendEmail(email);
+                    _mailService.Send(email);
+                      return RedirectToAction(nameof(CheckYourInbox));
                 }
                 
             }
